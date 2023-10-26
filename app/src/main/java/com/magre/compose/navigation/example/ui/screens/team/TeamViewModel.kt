@@ -16,8 +16,11 @@ class TeamViewModel @Inject constructor(
     private val teamMapper: TeamMapper
 ) : ViewModel() {
 
-    private val _teamState = MutableStateFlow(TeamState())
-    val teamState: StateFlow<TeamState> = _teamState.asStateFlow()
+    private val _viewState = MutableStateFlow(TeamViewState())
+    val viewState: StateFlow<TeamViewState> = _viewState.asStateFlow()
+
+    private val _viewEffects = MutableStateFlow<List<TeamViewEffect>>(emptyList())
+    val viewEffect: StateFlow<List<TeamViewEffect>> = _viewEffects
 
     init {
         getTeams.execute(
@@ -32,14 +35,48 @@ class TeamViewModel @Inject constructor(
     }
 
     private fun onGetTeams(teams: List<TeamModel>) {
-        _teamState.value = TeamState(teamData = teams)
+        _viewState.value = _viewState.value.copy(
+            teamData = teams
+        )
     }
 
     private fun onGetTeamsError() {
+        _viewState.value = _viewState.value.copy(
+            error = true
+        )
+    }
 
+    fun onViewIntent(viewIntent: TeamViewIntent) {
+        when (viewIntent) {
+            is TeamViewIntent.OnTeamClick -> {
+                addViewEffect(TeamViewEffect.NavigateToTeamDetail(viewIntent.teamId))
+            }
+        }
+    }
+
+    fun onEffectConsumed(effect: TeamViewEffect) {
+        _viewEffects.value = _viewEffects.value - effect
+    }
+
+    private fun addViewEffect(viewEffect: TeamViewEffect) {
+        _viewEffects.value = _viewEffects.value + viewEffect
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        getTeams.dispose()
     }
 }
 
-data class TeamState(
-    val teamData: List<TeamModel> = emptyList()
+sealed class TeamViewEffect {
+    data class NavigateToTeamDetail(val teamId: Int) : TeamViewEffect()
+}
+
+sealed class TeamViewIntent {
+    data class OnTeamClick(val teamId: Int) : TeamViewIntent()
+}
+
+data class TeamViewState(
+    val teamData: List<TeamModel> = emptyList(),
+    val error: Boolean = false
 )
