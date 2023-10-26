@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">ComposeNavigation</string>
-    <string name="home_screen">Home screen</string>
-    <string name="bike_screen">Bike screen</string>
-    <string name="settings_screen">Settings screen</string>
+
+    <!-- Bottom nav menu items -->
+    <string name="menu_item_home">Home</string>
+    <string name="menu_item_team">Teams</string>
+    <string name="menu_item_settings">Settings</string>
 </resources>

@@ -19,6 +19,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -27,8 +28,11 @@ import androidx.navigation.compose.rememberNavController
 import com.magre.compose.navigation.example.navigation.BottomNavMenuItem
 import com.magre.compose.navigation.example.navigation.NavigationHost
 import com.magre.compose.navigation.example.ui.theme.ComposeNavigationTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -64,7 +68,7 @@ fun MainBottomBar(
 ) {
     val screens = listOf(
         BottomNavMenuItem.Home,
-        BottomNavMenuItem.Bike,
+        BottomNavMenuItem.Team,
         BottomNavMenuItem.Settings
     )
 
@@ -78,7 +82,7 @@ fun MainBottomBar(
         screens.forEach { screen ->
             NavigationBarItem(
                 label = {
-                    Text(text = screen.title)
+                    Text(text = stringResource(id = screen.title))
                 },
                 icon = {
                     Icon(
