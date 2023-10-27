@@ -1,4 +1,4 @@
-package com.magre.compose.navigation.example.ui.screens.team
+package com.magre.compose.navigation.example.ui.screens.team.list
 
 import androidx.lifecycle.ViewModel
 import com.magre.compose.navigation.example.domain.usecase.GetTeams

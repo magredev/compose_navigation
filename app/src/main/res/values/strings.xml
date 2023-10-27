@@ -6,6 +6,16 @@
     <string name="menu_item_team">Teams</string>
     <string name="menu_item_settings">Settings</string>
 
+    <!-- Home screen -->
+    <string name="home_content">Under construction</string>
+
     <!-- Team screen -->
     <string name="error">An error has occurred. Please try again later</string>
+
+    <!-- Team detail screen -->
+    <string name="team_detail_title">Team detail</string>
+    <string name="team_detail_content">Under construction</string>
+
+    <!-- Settings screen -->
+    <string name="settings_content">Under construction</string>
 </resources>

@@ -7,6 +7,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -17,14 +18,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.magre.compose.navigation.example.R
 import com.magre.compose.navigation.example.navigation.BottomNavMenuItem
 import com.magre.compose.navigation.example.navigation.NavigationHost
 import com.magre.compose.navigation.example.ui.theme.ComposeNavigationTheme
@@ -48,10 +52,7 @@ fun MainScreen() {
 
         Scaffold(
             bottomBar = {
-                MainBottomBar(
-                    navController = navController,
-                    modifier = Modifier
-                )
+                MainBottomBar(navController = navController)
             }
         ) { paddingValues ->
             Box(modifier = Modifier.padding(paddingValues)) {
@@ -63,8 +64,7 @@ fun MainScreen() {
 
 @Composable
 fun MainBottomBar(
-    navController: NavHostController,
-    modifier: Modifier = Modifier
+    navController: NavHostController
 ) {
     val screens = listOf(
         BottomNavMenuItem.Home,
@@ -73,8 +73,8 @@ fun MainBottomBar(
     )
 
     NavigationBar(
-        modifier = modifier,
-        containerColor = Color.LightGray,
+        modifier = Modifier.clip(RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)),
+        containerColor = colorResource(id = R.color.nba_blue),
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
@@ -101,10 +101,11 @@ fun MainBottomBar(
                     }
                 },
                 colors = NavigationBarItemDefaults.colors(
-                    unselectedTextColor = Color.Gray,
-                    selectedTextColor = Color.White,
-                    unselectedIconColor = Color.Gray,
-                    selectedIconColor = Color.White
+                    selectedIconColor = colorResource(id = R.color.nba_white),
+                    selectedTextColor = colorResource(id = R.color.nba_red),
+                    indicatorColor = colorResource(id = R.color.nba_red),
+                    unselectedIconColor = colorResource(id = R.color.nba_white),
+                    unselectedTextColor = colorResource(id = R.color.nba_white)
                 )
             )
         }

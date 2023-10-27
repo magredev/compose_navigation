@@ -1,4 +1,4 @@
-package com.magre.compose.navigation.example.ui.screens.team
+package com.magre.compose.navigation.example.ui.screens.team.list
 
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -115,8 +115,7 @@ private fun ViewEffects(
         LaunchedEffect(effect) {
             when (effect) {
                 is TeamViewEffect.NavigateToTeamDetail -> {
-                    effect.teamId
-                    navController.navigate(AppScreens.TeamDetailScreen.route)
+                    navController.navigate(route = AppScreens.TeamDetailScreen.route + "/${effect.teamId}")
                 }
             }
         }
@@ -127,7 +126,6 @@ private fun ViewEffects(
 @Preview
 @Composable
 fun TeamRowPreview() {
-    val navController = rememberNavController()
     TeamRow(
         TeamModel(
             id = 1,
