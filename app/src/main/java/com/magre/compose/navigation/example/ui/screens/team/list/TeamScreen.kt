@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -85,7 +86,8 @@ fun TeamRow(
             .padding(16.dp)
             .clickable {
                 onTeamClick(team.id)
-            },
+            }
+            .testTag("TEAM_ROW_TAG"),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
@@ -98,9 +100,17 @@ fun TeamRow(
                 .padding(8.dp)
         )
         Column(modifier = Modifier.padding(start = 16.dp)) {
-            Text(text = team.fullName, style = MaterialTheme.typography.bodyLarge)
+            Text(
+                modifier = Modifier.testTag("TEAM_ROW_TEAM_NAME_TAG"),
+                text = team.fullName,
+                style = MaterialTheme.typography.bodyLarge
+            )
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = team.city, style = MaterialTheme.typography.bodySmall)
+            Text(
+                modifier = Modifier.testTag("TEAM_ROW_TEAM_CITY_TAG"),
+                text = team.city,
+                style = MaterialTheme.typography.bodySmall
+            )
         }
     }
 }

@@ -8,6 +8,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.magre.compose.navigation.example.R
@@ -24,6 +25,7 @@ fun HomeBody() {
         contentAlignment = Alignment.Center
     ) {
         Text(
+            modifier = Modifier.testTag("HOME_BODY_TEXT_TAG"),
             text = stringResource(id = R.string.home_content),
             style = MaterialTheme.typography.bodyLarge
         )
