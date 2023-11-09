@@ -4,10 +4,11 @@ import com.magre.compose.navigation.example.data.mapper.TeamDataMapper
 import com.magre.compose.navigation.example.data.model.TeamData
 import com.magre.compose.navigation.example.data.source.TeamDataSource
 import com.magre.compose.navigation.example.domain.model.TeamDomain
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import io.reactivex.Single
 import junit.framework.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -29,32 +30,15 @@ class TeamRepositoryTest {
 
     @Test
     fun `When getTeams is invoked, Then returns the teams list from the data source properly mapped`() {
-        every { teamDataSource.getTeams() } returns Single.just(teamsData)
+        coEvery { teamDataSource.getTeams() } returns teamsData
         every { teamDataMapper.map(teamsData) } returns teamsDomain
 
-        val result = teamRepository.getTeams().test()
-        result.assertNoErrors()
-        result.assertComplete()
+        val result = teamRepository.getTeams()
 
-        verify(exactly = 1) { teamDataSource.getTeams() }
+        coVerify(exactly = 1) { teamDataSource.getTeams() }
         verify(exactly = 1) { teamDataMapper.map(teamsData) }
 
-        assertEquals(result.values().first(), teamsDomain)
-    }
-
-    @Test
-    fun `When getTeams is invoked, And the data source returns an error, Then returns the same error`() {
-        val throwable = Throwable("Data source error")
-
-        every { teamDataSource.getTeams() } returns Single.error(throwable)
-
-        val result = teamRepository.getTeams().test()
-        result.assertError(throwable)
-
-        verify(exactly = 1) { teamDataSource.getTeams() }
-        verify(exactly = 0) { teamDataMapper.map(teamsData) }
-
-        assertEquals(result.errors().first(), throwable)
+        assertEquals(result, teamsDomain)
     }
 
     companion object {

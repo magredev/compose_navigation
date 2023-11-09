@@ -1,6 +1,7 @@
 package com.magre.compose.navigation.example.ui.screens.team.list
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.magre.compose.navigation.example.domain.usecase.GetTeams
 import com.magre.compose.navigation.example.mapper.TeamMapper
 import com.magre.compose.navigation.example.model.TeamModel
@@ -8,6 +9,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,15 +27,12 @@ class TeamViewModel @Inject constructor(
     val viewEffect: StateFlow<List<TeamViewEffect>> = _viewEffects
 
     init {
-        getTeams.execute(
-            { teams ->
+        // todo: handle errors
+        viewModelScope.launch {
+            getTeams.invoke().onEach { teams ->
                 onGetTeams(teamMapper.map(teams))
-            },
-            {
-                onGetTeamsError()
-            },
-            GetTeams.Params()
-        )
+            }.launchIn(this)
+        }
     }
 
     private fun onGetTeams(teams: List<TeamModel>) {
@@ -60,11 +61,6 @@ class TeamViewModel @Inject constructor(
 
     private fun addViewEffect(viewEffect: TeamViewEffect) {
         _viewEffects.value = _viewEffects.value + viewEffect
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        getTeams.dispose()
     }
 }
 

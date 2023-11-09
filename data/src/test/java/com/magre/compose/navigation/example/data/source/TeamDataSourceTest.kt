@@ -5,11 +5,13 @@ import com.magre.compose.navigation.example.data.model.TeamData
 import com.magre.compose.navigation.example.data.webservice.NbaWebservice
 import com.magre.compose.navigation.example.data.webservice.dto.GetTeamsDto
 import com.magre.compose.navigation.example.data.webservice.dto.TeamDto
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import io.reactivex.Single
 import junit.framework.Assert.assertEquals
+import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
 
@@ -30,30 +32,17 @@ class TeamDataSourceTest {
 
     @Test
     fun `When getTeams is called, Then returns a list of teams from the webservice properly mapped`() {
-        every { nbaWebservice.getTeams() } returns Single.just(getTeamsDto)
+        coEvery { nbaWebservice.getTeams() } returns getTeamsDto
         every { teamDtoMapper.map(getTeamsDto.teams) } returns teamsData
 
-        val result = teamDataSource.getTeams().test()
-        result.assertNoErrors()
-        result.assertComplete()
+        val result = runBlocking {
+            teamDataSource.getTeams()
+        }
 
-        verify(exactly = 1) { nbaWebservice.getTeams() }
+        coVerify(exactly = 1) { nbaWebservice.getTeams() }
         verify(exactly = 1) { teamDtoMapper.map(getTeamsDto.teams) }
 
-        assertEquals(result.values().first(), teamsData)
-    }
-
-    @Test
-    fun `When getTeams is called, And the webservice returns an error, Then returns the same error`() {
-        val error = Throwable("Error")
-        every { nbaWebservice.getTeams() } returns Single.error(error)
-
-        val result = teamDataSource.getTeams().test()
-        result.assertError(error)
-
-        verify(exactly = 1) { nbaWebservice.getTeams() }
-
-        assertEquals(result.errors().first(), error)
+        assertEquals(result, teamsData)
     }
 
     companion object {

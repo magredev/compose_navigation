@@ -1,9 +1,9 @@
 package com.magre.compose.navigation.example.domain.repository
 
 import com.magre.compose.navigation.example.domain.model.TeamDomain
-import io.reactivex.Single
+import kotlinx.coroutines.flow.Flow
 
 interface TeamRepositoryContract {
 
-    fun getTeams(): Single<List<TeamDomain>>
+    fun getTeams(): Flow<List<TeamDomain>>
 }

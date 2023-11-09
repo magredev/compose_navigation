@@ -1,15 +1,17 @@
 plugins {
     id("java-library")
     id("kotlin")
-    id("kotlin-kapt")
 }
 
 dependencies {
 
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.21")
-    implementation("io.reactivex.rxjava2:rxjava:2.2.10")
-    implementation("io.reactivex.rxjava2:rxandroid:2.1.1")
-    implementation("io.reactivex.rxjava2:rxkotlin:2.4.0")
+    // kotlin
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.0")
+    // Injection
     implementation("javax.inject:javax.inject:1")
+    // Coroutines
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+    // Test
     testImplementation("junit:junit:4.13.2")
+    testImplementation("io.mockk:mockk:1.12.5")
 }

@@ -2,7 +2,6 @@ package com.magre.compose.navigation.example.data.webservice
 
 import android.content.Context
 import com.magre.compose.navigation.example.data.webservice.dto.GetTeamsDto
-import io.reactivex.Single
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -15,7 +14,7 @@ import java.util.concurrent.TimeUnit
 interface NbaWebservice {
 
     @GET(TEAMS_ENDPOINT)
-    fun getTeams(): Single<GetTeamsDto>
+    suspend fun getTeams(): GetTeamsDto
 
     companion object {
         private const val NBA_API_BASE_URL = "https://free-nba.p.rapidapi.com"
